@@ -64,7 +64,7 @@ def draw_pose_json(pose_json, resolution_x, show_body, show_face, show_hands, po
                         confidence = body[i+2]
                         
                         if body_scale != 1.0:
-                            point = [(p[0] - 0.5) * body_scale + 0.5, (p[1] - 0.5) * body_scale + 0.5]
+                            point = scale(p, body_scale, pivot)
                         else:
                             point = p[:]
                             
@@ -130,14 +130,13 @@ def draw_pose_json(pose_json, resolution_x, show_body, show_face, show_hands, po
                         rh.append(p_scaled)
                     hands.append(rh)
 
-            normalized_pivot = [0.5, 0.5]
             
             if hands:
-                hands = [[scale(lm, overall_scale, normalized_pivot) for lm in hand] for hand in hands]
+                hands = [[scale(lm, overall_scale, pivot) for lm in hand] for hand in hands]
             if faces:
-                faces = [[scale(lm, overall_scale, normalized_pivot) for lm in face] for face in faces]
+                faces = [[scale(lm, overall_scale, pivot) for lm in face] for face in faces]
             if candidate:
-                candidate = [scale(lm, overall_scale, normalized_pivot) for lm in candidate]
+                candidate = [scale(lm, overall_scale, pivot) for lm in candidate]
 
             if candidate:
                 candidate = np.array(candidate).astype(float)
